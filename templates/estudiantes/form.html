@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ 'Editar Estudiante' if estudiante else 'Nuevo Estudiante' }}</h2>
+<h2>{{ 'Editar Estudiante' if estudiante and estudiante.id else 'Nuevo Estudiante' }}</h2>
 <div class="card p-4 shadow-sm">
     <form method="POST">
         <div class="mb-3">

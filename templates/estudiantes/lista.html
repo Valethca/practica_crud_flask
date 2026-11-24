@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Listado de Estudiantes</h2>
+    <a href="{{ url_for('nuevo_estudiante') }}" class="btn btn-primary">+ Nuevo Estudiante</a>
+</div>
+
+<form method="GET" class="row g-2 mb-3">
+    <div class="col-md-5">
+        <input type="text" name="q" class="form-control" placeholder="Buscar por nombre, apellido o correo..." value="{{ busqueda }}">
+    </div>
+    <div class="col-md-4">
+        <select name="carrera_id" class="form-select">
+            <option value="">-- Todas las carreras --</option>
+            {% for c in carreras %}
+            <option value="{{ c.id }}" {% if carrera_id|string == c.id|string %}selected{% endif %}>{{ c.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+        <a href="{{ url_for('listar_estudiantes') }}" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+
+<table class="table table-bordered table-hover bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Carrera</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in estudiantes %}
+        <tr>
+            <td>{{ e.id }}</td>
+            <td>{{ e.nombre }}</td>
+            <td>{{ e.apellido }}</td>
+            <td>{{ e.correo }}</td>
+            <td>{{ e.carrera_nombre }}</td>
+            <td>
+                <a href="{{ url_for('editar_estudiante', id=e.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                <form action="{{ url_for('eliminar_estudiante', id=e.id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar estudiante?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center">No se encontraron estudiantes.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Paginación -->
+{% if total_paginas > 1 %}
+<nav>
+    <ul class="pagination">
+        {% for p in range(1, total_paginas + 1) %}
+        <li class="page-item {% if p == pagina %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('listar_estudiantes', page=p, q=busqueda, carrera_id=carrera_id) }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

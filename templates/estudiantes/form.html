@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Editar Estudiante' if estudiante else 'Nuevo Estudiante' }}</h2>
+<div class="card p-4 shadow-sm">
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Nombre *</label>
+            <input type="text" name="nombre" class="form-control" maxlength="80" required value="{{ estudiante.nombre if estudiante else '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Apellido *</label>
+            <input type="text" name="apellido" class="form-control" maxlength="80" required value="{{ estudiante.apellido if estudiante else '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Correo Electrónico *</label>
+            <input type="email" name="correo" class="form-control" maxlength="120" required value="{{ estudiante.correo if estudiante else '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Carrera *</label>
+            <select name="carrera_id" class="form-select" required>
+                <option value="">-- Seleccione una carrera --</option>
+                {% for c in carreras %}
+                <option value="{{ c.id }}" {% if estudiante and estudiante.carrera_id == c.id %}selected{% endif %}>
+                    {{ c.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="{{ url_for('listar_estudiantes') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

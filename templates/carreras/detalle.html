@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">Detalle de Carrera</div>
+    <div class="card-body">
+        <h4>{{ carrera.nombre }}</h4>
+        <p>{{ carrera.descripcion or 'Sin descripción.' }}</p>
+        <a href="{{ url_for('listar_carreras') }}" class="btn btn-secondary btn-sm">Volver a Carreras</a>
+    </div>
+</div>
+
+<h5>Estudiantes Inscritos ({{ estudiantes|length }})</h5>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>Correo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in estudiantes %}
+        <tr>
+            <td>{{ e.id }}</td>
+            <td>{{ e.nombre }} {{ e.apellido }}</td>
+            <td>{{ e.correo }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="text-center">No hay estudiantes inscritos en esta carrera.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
